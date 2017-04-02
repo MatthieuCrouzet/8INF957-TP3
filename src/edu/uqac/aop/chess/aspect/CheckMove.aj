@@ -72,7 +72,11 @@ public aspect CheckMove {
 	}
 
 	private boolean checkQueen(Board b, Move mv, int p) {
-		return checkRook(b, mv, p) || checkBishop(b, mv, p);
+		if(mv.xF == mv.xI || mv.yF == mv.yI){
+			return checkRook(b, mv, p);
+		} else {
+			return checkBishop(b, mv, p);
+		}
 	}
 
 	private boolean checkKnight(Board b, Move mv, int p) {
