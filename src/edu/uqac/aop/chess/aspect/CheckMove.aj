@@ -20,7 +20,7 @@ public aspect CheckMove {
 	}
 	
 	
-	protected boolean checkMove(Board b, Move mv){
+	protected static boolean checkMove(Board b, Move mv){
 		Piece p = b.getGrid()[mv.xI][mv.yI].getPiece();
 		if 		(p instanceof Bishop) 	return checkBishop(b, mv, p.getPlayer());
 		else if (p instanceof King) 	return checkKing(b, mv, p.getPlayer());
@@ -32,7 +32,7 @@ public aspect CheckMove {
 	}
 	
 	
-	private boolean checkRook(Board b, Move mv, int p) {
+	protected static boolean checkRook(Board b, Move mv, int p) {
 		//Impossible de manger ses propres pieces
 		if(b.getGrid()[mv.xF][mv.yF].isOccupied() && b.getGrid()[mv.xF][mv.yF].getPiece().getPlayer() == p){
 			return false;
@@ -71,7 +71,7 @@ public aspect CheckMove {
 		return true;
 	}
 
-	private boolean checkQueen(Board b, Move mv, int p) {
+	protected static boolean checkQueen(Board b, Move mv, int p) {
 		if(mv.xF == mv.xI || mv.yF == mv.yI){
 			return checkRook(b, mv, p);
 		} else {
@@ -79,7 +79,7 @@ public aspect CheckMove {
 		}
 	}
 
-	private boolean checkKnight(Board b, Move mv, int p) {
+	protected static boolean checkKnight(Board b, Move mv, int p) {
 		//Impossible de manger ses propres pieces
 		if(b.getGrid()[mv.xF][mv.yF].isOccupied() && b.getGrid()[mv.xF][mv.yF].getPiece().getPlayer() == p){
 			return false;
@@ -88,7 +88,7 @@ public aspect CheckMove {
 		return true;
 	}
 
-	private boolean checkKing(Board b, Move mv, int p) {
+	protected static boolean checkKing(Board b, Move mv, int p) {
 		//Impossible de manger ses propres pieces
 		if(b.getGrid()[mv.xF][mv.yF].isOccupied() && b.getGrid()[mv.xF][mv.yF].getPiece().getPlayer() == p){
 			return false;
@@ -97,35 +97,35 @@ public aspect CheckMove {
 		return true;
 	}
 
-	private boolean checkBishop(Board b, Move mv, int p) {
+	protected static boolean checkBishop(Board b, Move mv, int p) {
 		//Impossible de manger ses propres pieces
 		if(b.getGrid()[mv.xF][mv.yF].isOccupied() && b.getGrid()[mv.xF][mv.yF].getPiece().getPlayer() == p){
 			return false;
 		}
 		if(mv.yF > mv.yI && mv.xF > mv.xI){
 			for(int i = 1; i < mv.yF - mv.yI; i++){
-				if(b.getGrid()[mv.xI + i][mv.yI + i].isOccupied()){
+				if(mv.xI+i < Board.SIZE && b.getGrid()[mv.xI + i][mv.yI + i].isOccupied()){
 					return false;
 				}
 			}
 		} 
 		if(mv.yF < mv.yI && mv.xF > mv.xI){
 			for(int i = 1; i < mv.yI - mv.yF; i++){
-				if(b.getGrid()[mv.xI + i][mv.yI - i].isOccupied()){
+				if(mv.xI+i < Board.SIZE && b.getGrid()[mv.xI + i][mv.yI - i].isOccupied()){
 					return false;
 				}
 			}
 		} 
 		if(mv.yF > mv.yI && mv.xF < mv.xI){
 			for(int i = 1; i < mv.yF - mv.yI; i++){
-				if(b.getGrid()[mv.xI - i][mv.yI + i].isOccupied()){
+				if(mv.xI-i > -1 && b.getGrid()[mv.xI - i][mv.yI + i].isOccupied()){
 					return false;
 				}
 			}
 		} 
 		if(mv.yF < mv.yI && mv.xF < mv.xI){
 			for(int i = 1; i < mv.yI - mv.yF; i++){
-				if(b.getGrid()[mv.xI - i][mv.yI - i].isOccupied()){
+				if(mv.xI-i > -1 && b.getGrid()[mv.xI - i][mv.yI - i].isOccupied()){
 					return false;
 				}
 			}
@@ -134,7 +134,7 @@ public aspect CheckMove {
 		return true;
 	}
 
-	protected boolean checkPawn(Board b, Move mv, int p) {
+	protected static boolean checkPawn(Board b, Move mv, int p) {
 		if(p == Player.BLACK){
 			//Pas de retour arriere
 			if(mv.yF >= mv.yI) {
@@ -156,7 +156,7 @@ public aspect CheckMove {
 					return false;
 				}
 			}
-			//Impossible d'aller en travers si case non occupée
+			//Impossible d'aller en travers si case non occupï¿½e
 			else if(mv.xF != mv.xI){
 				return false;
 			}
@@ -183,7 +183,7 @@ public aspect CheckMove {
 					return false;
 				}
 			}
-			//Impossible d'aller en travers si case non occupée
+			//Impossible d'aller en travers si case non occupï¿½e
 			else if(mv.xF != mv.xI){
 				return false;
 			}
